@@ -1,12 +1,10 @@
+using TareaApii.Data;
+using TareaApii.Services;
 using Microsoft.EntityFrameworkCore;
-using System;
-using WebAPI1.Data;
-using WebAPI1.Services;
+
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddDbContext<AppDbContext>(
-    options => options.UseInMemoryDatabase("UserDB"));
-
+    options => options.UseInMemoryDatabase("UserDb"));
 // Add services to the container.
 
 builder.Services.AddScoped<UserService>();

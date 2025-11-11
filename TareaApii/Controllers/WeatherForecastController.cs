@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using WebAPI1.Models;
+using TareaApii.Models;
 
-namespace WebAPI1.Controllers
+namespace TareaApii.Controllers
 {
     [ApiController]
     [Route("[controller]")]

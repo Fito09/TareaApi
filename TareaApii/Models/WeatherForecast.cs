@@ -1,4 +1,4 @@
-namespace WebAPI1.Models
+namespace TareaApii.Models
 {
     public class WeatherForecast
     {

@@ -1,25 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using WebAPI1.Models.DTOs;
-using WebAPI1.Services;
+﻿using TareaApii.Models.DTOs;
+using TareaApii.Services;
+using Microsoft.AspNetCore.Mvc;
 
-namespace WebAPI1.Controllers
+namespace TareaApii.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
         private readonly UserService _userService;
-        public UsersController(UserService userService) {
+
+        public UsersController(UserService userService)
+        {
             _userService = userService;
         }
 
-        [HttpPost("obtener")]
+        [HttpGet("obtener")]
         public async Task<IActionResult> Obtener()
         {
             try
             {
-                var user = await _userService.GetAllUserAsync();
-                return Ok(user);
+                var users = await _userService.GetAllUserAsync();
+                return Ok(users);
             }
             catch (Exception ex)
             {
@@ -27,26 +29,40 @@ namespace WebAPI1.Controllers
             }
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(UserDto dto)
+        [HttpPost("registrar")]
+        public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
         {
             try
             {
                 var user = await _userService.RegisterUserAsync(dto);
                 return Ok(new { message = "Usuario creado", user.Id, user.UserName });
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+        [HttpPut("update")]
+        public async Task<IActionResult> Update([FromBody] RegisterUserDto dto)
+        {
+            try
+            {
+                var user = await _userService.UpdateUserAsync(dto);
+                return Ok(new { message = "Usuario actualizado", user.UserName });
+            }
+            catch (Exception ex)
+            {
                 return BadRequest(new { error = ex.Message });
             }
         }
 
-        [HttpPut("update")]
-        public async Task<IActionResult> Update(UpdateUserDto dto)
+        [HttpPut("updateemail")]
+        public async Task<IActionResult> UpdateEmail(string oldEmail, string newEmail)
         {
             try
             {
-                var user = await _userService.RegisterUserAsync(dto);
-                return Ok(new { message = "Usuario creado", user.Id, user.UserName });
+                var user = await _userService.UpdateEmailAsync(oldEmail, newEmail);
+                return Ok(new { message = "Email actualizado", user.Email });
             }
             catch (Exception ex)
             {
@@ -55,12 +71,12 @@ namespace WebAPI1.Controllers
         }
 
         [HttpDelete("delete")]
-        public async Task<IActionResult> Delete(DeleteUserDto dto)
+        public async Task<IActionResult> Delete(string email)
         {
             try
             {
-                var user = await _userService.RegisterUserAsync(dto);
-                return Ok(new { message = "Usuario creado", user.Id, user.UserName });
+                await _userService.DeleteUserAsync(email);
+                return Ok(new { message = "Usuario eliminado correctamente" });
             }
             catch (Exception ex)
             {

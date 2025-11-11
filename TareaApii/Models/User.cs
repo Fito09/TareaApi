@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebAPI1.Models
+namespace TareaApii.Models
 {
     public class User
     {
@@ -11,5 +11,8 @@ namespace WebAPI1.Models
         public string Email { get; set; } = string.Empty;
         [Required]
         public string Password { get; set; } = string.Empty;
+
+        public DateTime FechaNacimiento { get; set; }
+        public int edad;
     }
 }
