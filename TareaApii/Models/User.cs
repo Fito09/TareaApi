@@ -14,5 +14,8 @@ namespace TareaApii.Models
 
         public DateTime FechaNacimiento { get; set; }
         public int edad;
+
+        public int RoleId { get; set; }
+        public Role? Role { get; set; }
     }
 }

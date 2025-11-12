@@ -12,6 +12,9 @@ namespace TareaApii.Models.DTOs
 
         [Required]
         public string Password { get; set; } = string.Empty;
+
+        [Required]
+        public int RoleId { get; set; }
     }
 
     public class UpdateUserDto
@@ -25,5 +28,6 @@ namespace TareaApii.Models.DTOs
         public string Email { get; set; } = string.Empty;
         [Required]
         public string Password { get; set; } = string.Empty;
+        public int RoleId { get; set; }
     }
 }

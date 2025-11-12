@@ -18,8 +18,7 @@ namespace TareaApii.Services
 
         public async Task<List<User>> GetAllUserAsync()
         {
-            var user = _appDbContext.Users.ToListAsync();
-            return await user;
+            return await _appDbContext.Users.Include(u => u.Role).ToListAsync();
         }
 
         public async Task<User> RegisterUserAsync(RegisterUserDto dto)
@@ -27,11 +26,16 @@ namespace TareaApii.Services
             if (await _appDbContext.Users.AnyAsync(u => u.Email == dto.Email))
                 throw new Exception("Email ya registrado");
 
+            var role = await _appDbContext.Roles.FindAsync(dto.RoleId);
+            if (role == null)
+                throw new Exception("Rol no válido");
+
             var user = new User
             {
                 Email = dto.Email,
                 UserName = dto.UserName,
-                Password = HashPassword(dto.Password)
+                Password = HashPassword(dto.Password),
+                RoleId = dto.RoleId
             };
 
             _appDbContext.Users.Add(user);
@@ -49,6 +53,13 @@ namespace TareaApii.Services
             user.UserName = dto.UserName ?? user.UserName;
             if (!string.IsNullOrEmpty(dto.Password))
                 user.Password = HashPassword(dto.Password);
+            if (dto.RoleId != 0)
+            {
+                var role = await _appDbContext.Roles.FindAsync(dto.RoleId);
+                if (role == null)
+                    throw new Exception("Rol no válido");
+                user.RoleId = dto.RoleId;
+            }
 
             _appDbContext.Users.Update(user);
             await _appDbContext.SaveChangesAsync();
